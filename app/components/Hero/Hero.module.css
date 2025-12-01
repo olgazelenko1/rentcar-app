@@ -1,0 +1,94 @@
+/* Hero Section (desktop-only: 1440px) */
+.section {
+  position: relative;
+  height: 900px;
+  width: 100%;
+  overflow: hidden;
+  padding-top: 244px;
+  padding-bottom: 347px;
+}
+
+/* Background Image */
+.backgroundImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    linear-gradient(
+      to bottom,
+      var(--opacity-neutral-darkest-20),
+      var(--opacity-neutral-darkest-20)
+    ),
+    url('/images/Hero/Hero1.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+
+/* Desktop retina */
+@media (min-resolution: 2dppx), (-webkit-min-device-pixel-ratio: 2) {
+  .backgroundImage {
+    background-image:
+      linear-gradient(
+        to bottom,
+        var(--opacity-neutral-darkest-20),
+        var(--opacity-neutral-darkest-20)
+      ),
+      url('/images/Hero/Hero2.jpg');
+  }
+}
+
+/* Content */
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 40px;
+  width: 783px;
+  height: 204px;
+  margin-top: 436px;
+}
+
+/* Title */
+.title {
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 60px;
+  line-height: 1.2;
+  text-align: center;
+  color: #fff;
+}
+
+/* Description */
+.description {
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.33333;
+  text-align: center;
+  color: #fff;
+}
+
+/* Button */
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 0px;
+  border-radius: 12px;
+  padding: 12px 99px;
+  width: 276px;
+  height: 44px;
+  background-color: var(--color-royal-blue);
+}
+.button:hover {
+  background-color: var(--color-royal-blue-dark);
+  border-color: var(--color-royal-blue-dark);
+}
+.button:active {
+  opacity: 0.8;
+}

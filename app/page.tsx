@@ -1,9 +1,9 @@
-export default function Home() {
+import Hero from './components/Hero/Hero';
+export default function Page() {
   return (
-    <div>
-      <h1>Find your perfect rental car</h1>
-      <p>Reliable and budget-friendly rentals for any journey</p>
-      <button>View Catalog</button>
-    </div>
+    <main>
+      <Hero />
+      {/* ...інші компоненти... */}
+    </main>
   );
 }

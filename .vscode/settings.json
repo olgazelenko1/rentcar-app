@@ -1,0 +1,11 @@
+{
+  "files.associations": {
+    "*.svg": "xml"
+  },
+  "workbench.editorAssociations": [
+    {
+      "viewType": "default",
+      "filenamePattern": "*.svg"
+    }
+  ]
+}

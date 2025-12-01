@@ -1,10 +1,12 @@
+'use client';
+
 import CarDetails from '../components/CarDetails/CarDetails';
 import Link from 'next/link';
-import { getCars } from '../services/api';
+import { useCarsStore } from '../store/useCarsStore';
+import type { Car } from '../types/car';
 
-export default async function CatalogPage() {
-  const response = await getCars();
-  const cars = response.cars;
+const CatalogClient = () => {
+  const cars = useCarsStore((state) => state.cars);
 
   return (
     <div>
@@ -28,7 +30,7 @@ export default async function CatalogPage() {
 
         <div>
           {Array.isArray(cars) &&
-            cars.map((car) => (
+            cars.map((car: Car) => (
               <div key={car.id} style={{ marginBottom: 32 }}>
                 <Link href={`/catalog/${car.id}`}>
                   <CarDetails car={car} />
@@ -42,4 +44,6 @@ export default async function CatalogPage() {
       <button className="LoadMoreButton">Load More</button>
     </div>
   );
-}
+};
+
+export default CatalogClient;
