@@ -39,7 +39,10 @@ export default function BookingForm({ carId }: { carId: string }) {
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
-      <h2 className={styles.title}>Book this car</h2>
+      <h2 className={styles.title}>Book your car now</h2>
+      <p className={styles.subtitle}>
+        Stay connected! We are always ready to help you.
+      </p>
 
       <input
         className={styles.input}

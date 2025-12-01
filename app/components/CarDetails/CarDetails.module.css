@@ -1,0 +1,43 @@
+/* Layout solely for the car card; page container comes from Home.module.css
+.card {
+  width: 276px;
+  height: 424px;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.image {
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.price {
+  margin: 0;
+  font-weight: 600;
+}
+
+.description {
+  margin: 0;
+  color: #444;
+}
+
+.detailsList {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  display: grid;
+  row-gap: 4px;
+} */

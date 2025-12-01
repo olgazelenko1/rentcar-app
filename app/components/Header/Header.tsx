@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import css from './Header.module.css';
+import styles from '../../Home.module.css';
 
 export default function Header() {
   return (
     <header className={css.header} role="banner">
-      <div className={`container ${css.headerInner}`}>
+      <div className={`container ${styles.container} ${css.headerInner}`}>
         <Link className={css.headerLinkLogo} href="/">
           <div className={css.logo_icon}>
             <svg

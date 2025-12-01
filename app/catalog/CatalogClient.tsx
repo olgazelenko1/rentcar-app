@@ -2,46 +2,114 @@
 
 import CarDetails from '../components/CarDetails/CarDetails';
 import Link from 'next/link';
-import { useCarsStore } from '../store/useCarsStore';
+import Pagination from '../components/Pagination/Pagination';
 import type { Car } from '../types/car';
+import styles from './CatalogClient.module.css';
+import css from './CatalogClient.module.css';
+import { useCarsStore } from '../store/useCarsStore';
+import FilterBar from '../components/FilterBar/FilterBar';
+import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { getCars } from '../services/api';
 
-const CatalogClient = () => {
-  const cars = useCarsStore((state) => state.cars);
+interface Props {
+  initialCars: Car[];
+  currentPage: number;
+  totalPages: number;
+}
+
+const CatalogClient: React.FC<Props> = ({
+  initialCars,
+  currentPage,
+  totalPages,
+}) => {
+  const [cars, setCars] = useState<Car[]>(initialCars ?? []);
+  const [page, setPage] = useState<number>(currentPage ?? 1);
+  const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const limit = 12;
+
+  useEffect(() => {
+    setCars(initialCars ?? []);
+    setPage(currentPage ?? 1);
+  }, [initialCars, currentPage]);
+
+  const filters = useMemo(() => {
+    const params = Object.fromEntries(searchParams?.entries() ?? []);
+    const f: Record<string, string | number | boolean> = {};
+    if (params.brand) f.brand = params.brand;
+    if (params.price) f.price = params.price;
+    if (params.mileageFrom) f.mileageFrom = Number(params.mileageFrom);
+    if (params.mileageTo) f.mileageTo = Number(params.mileageTo);
+    return f;
+  }, [searchParams]);
+  const favorites = useCarsStore((s) => s.favorites);
+  const addFavorite = useCarsStore((s) => s.addFavorite);
+  const removeFavorite = useCarsStore((s) => s.removeFavorite);
+  const toggleFavorite = (id: string) => {
+    if (favorites.includes(id)) removeFavorite(id);
+    else addFavorite(id);
+  };
 
   return (
-    <div>
-      {/* Панель фільтрів */}
-      <div>
-        <select>
-          <option>Car brand</option>
-        </select>
-        <select>
-          <option>Price per hour</option>
-        </select>
-        <input type="number" placeholder="Mileage from" />
-        <input type="number" placeholder="Mileage to" />
-        <button type="button" className="SearchButton">
-          Search
-        </button>
-      </div>
+    <div className={css.container}>
+      <FilterBar />
 
       <div>
         <h2>Catalog</h2>
 
-        <div>
+        <div className={styles.grid}>
           {Array.isArray(cars) &&
-            cars.map((car: Car) => (
-              <div key={car.id} style={{ marginBottom: 32 }}>
-                <Link href={`/catalog/${car.id}`}>
-                  <CarDetails car={car} />
-                </Link>
-              </div>
-            ))}
+            cars.map((car: Car) => {
+              const isFav = favorites.includes(car.id);
+              return (
+                <div key={car.id} className={styles.item}>
+                  <Link href={`/catalog/${car.id}`}>
+                    <CarDetails car={car} />
+                  </Link>
+                  <button
+                    aria-label={
+                      isFav ? 'Remove from favorites' : 'Add to favorites'
+                    }
+                    className={styles.favoriteBtn}
+                    onClick={() => toggleFavorite(car.id)}
+                  >
+                    {isFav ? '★ In favorites' : '☆ Add to favorites'}
+                  </button>
+                </div>
+              );
+            })}
         </div>
       </div>
 
-      {/* Кнопка Load More */}
-      <button className="LoadMoreButton">Load More</button>
+      <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+        <Pagination currentPage={page} totalPages={totalPages} />
+        <button
+          className={styles.loadMoreBtn}
+          onClick={async () => {
+            if (loading) return;
+            if (page >= totalPages) return;
+            setLoading(true);
+            try {
+              const nextPage = page + 1;
+              const resp = await getCars(nextPage, limit, filters);
+              const nextCars = Array.isArray(resp?.cars) ? resp.cars : [];
+              setCars((prev) => [...prev, ...nextCars]);
+              setPage(nextPage);
+            } finally {
+              setLoading(false);
+            }
+          }}
+          disabled={loading || page >= totalPages}
+          aria-disabled={loading || page >= totalPages}
+        >
+          {loading
+            ? 'Loading…'
+            : page < totalPages
+              ? 'Load More'
+              : 'No more cars'}
+        </button>
+      </div>
     </div>
   );
 };

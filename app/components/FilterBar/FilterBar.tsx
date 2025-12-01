@@ -1,29 +1,36 @@
-import { useCarsStore } from '../../store/useCarsStore';
+'use client';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-type FilterType = {
-  brand?: string;
-  price?: string;
-  mileageFrom?: number;
-  mileageTo?: number;
-};
-
-const handleFilterChange = (newFilters: FilterType) => {
-  useCarsStore.getState().resetCars(); // скидає попередні результати
-  useCarsStore.getState().setFilters(newFilters);
-  // Далі робите новий запит і оновлюєте cars через setCars
+const useUpdateQuery = () => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  return (updates: Record<string, string | number | undefined>) => {
+    const params = new URLSearchParams(
+      searchParams ? Array.from(searchParams.entries()) : []
+    );
+    Object.entries(updates).forEach(([key, value]) => {
+      if (value === undefined || value === '') params.delete(key);
+      else params.set(key, String(value));
+    });
+    // Reset to first page on filter change
+    params.delete('page');
+    router.push(`${pathname}?${params.toString()}`);
+  };
 };
 export default function FilterBar() {
+  const updateQuery = useUpdateQuery();
   return (
     <div className="FilterBarContainer">
       <select
-        onChange={(e) => handleFilterChange({ brand: e.target.value })}
+        onChange={(e) => updateQuery({ brand: e.target.value })}
         className="FilterSelect"
       >
         <option value="">Car brand</option>
         {/* Додайте інші опції брендів */}
       </select>
       <select
-        onChange={(e) => handleFilterChange({ price: e.target.value })}
+        onChange={(e) => updateQuery({ price: e.target.value })}
         className="FilterSelect"
       >
         <option value="">Price per hour</option>
@@ -33,7 +40,7 @@ export default function FilterBar() {
         type="number"
         placeholder="Mileage from"
         onChange={(e) =>
-          handleFilterChange({ mileageFrom: Number(e.target.value) })
+          updateQuery({ mileageFrom: Number(e.target.value) || undefined })
         }
         className="FilterInput"
       />
@@ -41,7 +48,7 @@ export default function FilterBar() {
         type="number"
         placeholder="Mileage to"
         onChange={(e) =>
-          handleFilterChange({ mileageTo: Number(e.target.value) })
+          updateQuery({ mileageTo: Number(e.target.value) || undefined })
         }
         className="FilterInput"
       />
