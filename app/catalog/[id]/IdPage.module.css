@@ -1,13 +1,15 @@
-/* .car-page {
+.carPage {
   display: flex;
-  align-items: flex-end;
-  gap: 20px;
+  flex-direction: column;
+  gap: 24px;
 }
-.car-left {
-  flex-direction: row;
-  justify-content: flex-end;
-  gap: 20px;
+
+.formBottom {
+  margin-top: 8px;
 }
-.booking-section {
-  gap: 20px;
-} */
+
+@media (min-width: 769px) {
+  .formBottom {
+    max-width: 640px;
+  }
+}

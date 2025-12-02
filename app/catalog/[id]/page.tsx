@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import CarDetails from '@/app/components/CarDetails/CarDetails';
 import BookingForm from '@/app/components/BookingForm/BookingForm';
 import { getCarById } from '@/app/services/api';
+import styles from './IdPage.module.css';
 
 export const dynamic = 'force-dynamic'; // щоб нові машини відображались одразу
 
@@ -23,12 +24,12 @@ export default async function CarPage({
   }
 
   return (
-    <div className="car-page">
-      <div className="car-left">
-        <CarDetails car={car} />
+    <div className={styles.carPage}>
+      <div className={styles.details}>
+        <CarDetails car={car} variant="horizontal" />
       </div>
 
-      <div className="booking-section">
+      <div className={styles.formBottom}>
         <BookingForm carId={car.id} />
       </div>
     </div>

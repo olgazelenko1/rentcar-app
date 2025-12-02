@@ -64,18 +64,28 @@ const CatalogClient: React.FC<Props> = ({
               const isFav = favorites.includes(car.id);
               return (
                 <div key={car.id} className={styles.item}>
-                  <Link href={`/catalog/${car.id}`}>
-                    <CarDetails car={car} />
-                  </Link>
                   <button
                     aria-label={
                       isFav ? 'Remove from favorites' : 'Add to favorites'
                     }
-                    className={styles.favoriteBtn}
+                    className={
+                      isFav
+                        ? `${styles.favoriteOverlayBtn} ${styles.fav}`
+                        : styles.favoriteOverlayBtn
+                    }
                     onClick={() => toggleFavorite(car.id)}
+                    type="button"
                   >
-                    {isFav ? '★ In favorites' : '☆ Add to favorites'}
+                    {isFav ? '💙' : '🤍'}
                   </button>
+                  <CarDetails car={car} />
+                  <Link
+                    href={`/catalog/${car.id}`}
+                    className={styles.readMoreBtn}
+                    aria-label={`Read more about ${car.brand} ${car.model}`}
+                  >
+                    Read more
+                  </Link>
                 </div>
               );
             })}

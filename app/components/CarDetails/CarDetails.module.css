@@ -1,32 +1,62 @@
-/* Layout solely for the car card; page container comes from Home.module.css
-.card {
-  width: 276px;
-  height: 424px;
+/* Vertical card layout (used in catalog list) */
+.cardVertical {
   display: flex;
-  flex-direction: row;
-  gap: 16px;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.image {
+.imageVertical {
+  width: 100%;
+  height: auto;
   border-radius: 8px;
   object-fit: cover;
 }
 
-.info {
+.infoVertical {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
+/* Horizontal detail layout (image left, info right) */
+.cardHorizontal {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.imageHorizontal {
+  width: 480px;
+  max-width: 48vw;
+  height: auto;
+  border-radius: 12px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.infoHorizontal {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .title {
   margin: 0;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 600;
 }
 
 .price {
   margin: 0;
   font-weight: 600;
+}
+
+.meta {
+  margin: 0;
+  color: #555;
+  font-size: 14px;
 }
 
 .description {
@@ -39,5 +69,15 @@
   padding: 0;
   margin: 8px 0 0;
   display: grid;
-  row-gap: 4px;
-} */
+  row-gap: 6px;
+}
+
+@media (max-width: 768px) {
+  .cardHorizontal {
+    flex-direction: column;
+  }
+  .imageHorizontal {
+    width: 100%;
+    max-width: 100%;
+  }
+}
