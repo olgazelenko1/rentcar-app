@@ -50,7 +50,7 @@
     color 0.12s ease;
 }
 .navLink:hover {
-  background: #f1f5f9;
+  background: #3470ff;
 }
 @media (max-width: 640px) {
   .nav {

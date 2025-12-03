@@ -1,20 +1,23 @@
 .container {
   display: block;
+  height: 1368px;
 }
 
 .grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 32px;
 }
 
 .item {
+  width: 276px;
+  height: 424px;
   position: relative;
   display: flex;
   flex-direction: column;
   gap: 12px;
   padding: 8px;
-  border: 1px solid #e5e5e5;
   border-radius: 12px;
   background: #fff;
 }
@@ -38,23 +41,19 @@
     color 120ms ease;
 }
 
-/* .favoriteOverlayBtn:hover {
-  background: #fff;
-  border-color: #bbb;
-} */
-
 .favoriteOverlayBtn.fav {
   color: #3b82f6;
-  /* border-color: #3b82f6; */
 }
 
 .readMoreBtn {
-  align-self: flex-start;
-  background: #3b82f6;
+  align-self: center;
+  background-color: #3470ff;
   color: #fff;
   border: none;
-  padding: 8px 14px;
-  border-radius: 8px;
+  border-radius: 12px;
+  padding: 12px 99px;
+  width: 276px;
+  height: 44px;
   font-size: 14px;
   text-decoration: none;
   cursor: pointer;

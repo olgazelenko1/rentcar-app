@@ -56,6 +56,29 @@
   gap: 12px;
 }
 
+.searchRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+
+.searchBtn {
+  height: 40px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #3b82f6;
+  background: #3b82f6;
+  color: #fff;
+  cursor: pointer;
+}
+
+.searchBtn:hover {
+  background: #2563eb;
+}
+.searchBtn:active {
+  background: #1d4ed8;
+}
+
 /* Responsive tweaks */
 @media (max-width: 1024px) {
   .field {

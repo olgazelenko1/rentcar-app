@@ -7,7 +7,7 @@ const Hero: React.FC = () => {
   return (
     <section className={style.section} id="hero" aria-label="Hero section">
       <div className={style.backgroundImage} aria-hidden="true"></div>
-      <div className={css.container}>
+      <div className={`${css.container} ${style.inner}`}>
         <div className={style.content}>
           <h1 className={style.title}>Find your perfect rental car</h1>
           <p className={style.description}>

@@ -6,11 +6,11 @@ export interface Car {
   type: string;
   img: string;
   description: string;
-  fuelConsumption: string; // value in JSON is a string like "10.5"
-  engineSize: string; // e.g. "3.6L V6"
+  fuelConsumption: string;
+  engineSize: string;
   accessories: string[];
   functionalities: string[];
-  rentalPrice: string; // value in JSON is a string like "40"
+  rentalPrice: string;
   rentalCompany: string;
   address: string;
   rentalConditions: string[];

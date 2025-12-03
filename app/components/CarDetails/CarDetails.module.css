@@ -1,4 +1,4 @@
-/* Vertical card layout (used in catalog list) */
+/* Vertical card layout (used in catalog list)
 .cardVertical {
   display: flex;
   flex-direction: column;
@@ -19,7 +19,7 @@
 }
 
 /* Horizontal detail layout (image left, info right) */
-.cardHorizontal {
+/* .cardHorizontal {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -80,4 +80,4 @@
     width: 100%;
     max-width: 100%;
   }
-}
+} */

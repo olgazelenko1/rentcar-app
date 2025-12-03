@@ -1,6 +1,8 @@
 'use client';
+
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import styles from './FilterBar.module.css';
+import React from 'react';
 
 const useUpdateQuery = () => {
   const router = useRouter();
@@ -22,10 +24,14 @@ const useUpdateQuery = () => {
 export default function FilterBar() {
   const updateQuery = useUpdateQuery();
   const params = useSearchParams();
-  const brand = params?.get('brand') ?? '';
-  const price = params?.get('price') ?? '';
-  const mileageFrom = params?.get('mileageFrom') ?? '';
-  const mileageTo = params?.get('mileageTo') ?? '';
+  const [brand, setBrand] = React.useState<string>(params?.get('brand') ?? '');
+  const [price, setPrice] = React.useState<string>(params?.get('price') ?? '');
+  const [mileageFrom, setMileageFrom] = React.useState<string>(
+    params?.get('mileageFrom') ?? ''
+  );
+  const [mileageTo, setMileageTo] = React.useState<string>(
+    params?.get('mileageTo') ?? ''
+  );
   return (
     <section className={styles.container} aria-label="Filters">
       <div className={styles.row}>
@@ -35,13 +41,11 @@ export default function FilterBar() {
           </label>
           <select
             id="brand"
-            onChange={(e) => updateQuery({ brand: e.target.value })}
+            onChange={(e) => setBrand(e.target.value)}
             className={styles.select}
-            defaultValue={brand}
+            value={brand}
           >
-            <option value="" disabled>
-              Select brand
-            </option>
+            <option value="">All brands</option>
             <option value="Buick">Buick</option>
             <option value="Audi">Audi</option>
             <option value="BMW">BMW</option>
@@ -62,23 +66,19 @@ export default function FilterBar() {
           </label>
           <select
             id="price"
-            onChange={(e) => updateQuery({ price: e.target.value })}
+            onChange={(e) => setPrice(e.target.value)}
             className={styles.select}
-            defaultValue={price}
+            value={price}
           >
             <option value="" disabled>
               Select max price
             </option>
-            <option value="10">Up to $10</option>
-            <option value="20">Up to $20</option>
             <option value="30">Up to $30</option>
             <option value="40">Up to $40</option>
             <option value="50">Up to $50</option>
             <option value="60">Up to $60</option>
             <option value="70">Up to $70</option>
             <option value="80">Up to $80</option>
-            <option value="90">Up to $90</option>
-            <option value="100">Up to $100</option>
           </select>
         </div>
 
@@ -89,16 +89,10 @@ export default function FilterBar() {
               id="mileageFrom"
               type="number"
               inputMode="numeric"
-              min={0}
+              min={3000}
               placeholder="from"
-              defaultValue={mileageFrom}
-              onChange={(e) =>
-                updateQuery({
-                  mileageFrom: e.target.value
-                    ? Number(e.target.value)
-                    : undefined,
-                })
-              }
+              value={mileageFrom}
+              onChange={(e) => setMileageFrom(e.target.value)}
               className={styles.input}
               aria-label="Mileage from"
             />
@@ -106,20 +100,32 @@ export default function FilterBar() {
               id="mileageTo"
               type="number"
               inputMode="numeric"
-              min={0}
+              min={5000}
               placeholder="to"
-              defaultValue={mileageTo}
-              onChange={(e) =>
-                updateQuery({
-                  mileageTo: e.target.value
-                    ? Number(e.target.value)
-                    : undefined,
-                })
-              }
+              value={mileageTo}
+              onChange={(e) => setMileageTo(e.target.value)}
               className={styles.input}
               aria-label="Mileage to"
             />
           </div>
+        </div>
+
+        <div className={styles.actionsRow}>
+          <button
+            type="button"
+            className={styles.searchBtn}
+            onClick={() =>
+              updateQuery({
+                brand: brand || undefined,
+                price: price || undefined,
+                mileageFrom: mileageFrom ? Number(mileageFrom) : undefined,
+                mileageTo: mileageTo ? Number(mileageTo) : undefined,
+              })
+            }
+            aria-label="Apply filters"
+          >
+            Search
+          </button>
         </div>
       </div>
     </section>
