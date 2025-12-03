@@ -5,7 +5,6 @@ import Link from 'next/link';
 import Pagination from '../components/Pagination/Pagination';
 import type { Car } from '../types/car';
 import styles from './CatalogClient.module.css';
-import css from './CatalogClient.module.css';
 import { useCarsStore } from '../store/useCarsStore';
 import FilterBar from '../components/FilterBar/FilterBar';
 import { useEffect, useMemo, useState } from 'react';
@@ -52,7 +51,7 @@ const CatalogClient: React.FC<Props> = ({
   };
 
   return (
-    <div className={css.container}>
+    <div className={styles.container}>
       <FilterBar />
 
       <div>
@@ -92,33 +91,51 @@ const CatalogClient: React.FC<Props> = ({
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-        <Pagination currentPage={page} totalPages={totalPages} />
-        <button
-          className={styles.loadMoreBtn}
-          onClick={async () => {
-            if (loading) return;
-            if (page >= totalPages) return;
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 12,
+          alignItems: 'center',
+        }}
+      >
+        <Pagination
+          pageCount={totalPages}
+          onPageChange={async (selected) => {
+            const nextPage = Number(selected) + 1;
             setLoading(true);
             try {
-              const nextPage = page + 1;
               const resp = await getCars(nextPage, limit, filters);
-              const nextCars = Array.isArray(resp?.cars) ? resp.cars : [];
-              setCars((prev) => [...prev, ...nextCars]);
+              const list = Array.isArray(resp?.cars) ? resp.cars : [];
+              setCars(list);
               setPage(nextPage);
             } finally {
               setLoading(false);
             }
           }}
-          disabled={loading || page >= totalPages}
-          aria-disabled={loading || page >= totalPages}
-        >
-          {loading
-            ? 'Loading…'
-            : page < totalPages
-              ? 'Load More'
-              : 'No more cars'}
-        </button>
+        />
+        {page < totalPages && (
+          <button
+            className={styles.loadMoreBtn}
+            onClick={async () => {
+              if (loading) return;
+              setLoading(true);
+              try {
+                const nextPage = page + 1;
+                const resp = await getCars(nextPage, limit, filters);
+                const nextCars = Array.isArray(resp?.cars) ? resp.cars : [];
+                setCars((prev) => [...prev, ...nextCars]);
+                setPage(nextPage);
+              } finally {
+                setLoading(false);
+              }
+            }}
+            disabled={loading}
+            aria-disabled={loading}
+          >
+            {loading ? 'Loading…' : 'Load More'}
+          </button>
+        )}
       </div>
     </div>
   );

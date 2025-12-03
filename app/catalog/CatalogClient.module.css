@@ -69,3 +69,26 @@
 .readMoreBtn:active {
   background: #1d4ed8;
 }
+.loadMoreBtn {
+  margin: 32px auto 0 auto;
+  background-color: #3470ff;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 99px;
+  width: 276px;
+  height: 44px;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 120ms ease,
+    box-shadow 120ms ease;
+}
+.loadMoreBtn:hover {
+  background: #2563eb;
+}
+
+.loadMoreBtn:active {
+  background: #1d4ed8;
+}
