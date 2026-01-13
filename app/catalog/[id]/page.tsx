@@ -1,8 +1,9 @@
 import { notFound } from 'next/navigation';
-import CarDetails from '@/app/components/CarDetails/CarDetails';
+
 import BookingForm from '@/app/components/BookingForm/BookingForm';
 import { getCarById } from '@/app/services/api';
 import styles from './IdPage.module.css';
+import Image from 'next/image';
 import css from '../../Home.module.css';
 
 export const dynamic = 'force-dynamic';
@@ -27,9 +28,19 @@ export default async function CarPage({
   return (
     <div className={`${css.container} ${styles.carPage}`}>
       <div className={styles.details}>
-        <CarDetails car={car} />
-        <div className={styles.fullDetails}>
-          <h2 className="{car.info}">Details</h2>
+        <div className={styles.left}>
+          <Image
+            src={car.img}
+            alt={`${car.brand} ${car.model}`}
+            width={640}
+            height={420}
+          />
+          <BookingForm carId={car.id} />
+        </div>
+        <section className={styles.right} aria-labelledby="details-title">
+          <h2 id="details-title" className={styles.fullDetailsTitle}>
+            Details
+          </h2>
           <ul>
             <li>
               <strong>Brand:</strong> {car.brand}
@@ -86,12 +97,10 @@ export default async function CarPage({
               </li>
             )}
           </ul>
-        </div>
+        </section>
       </div>
 
-      <div className={styles.formBottom}>
-        <BookingForm carId={car.id} />
-      </div>
+      {/* Booking form now under image on the left */}
     </div>
   );
 }
