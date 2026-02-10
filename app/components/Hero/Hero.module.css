@@ -1,10 +1,8 @@
-/* Hero Section (desktop-only: 1440px) */
 .section {
   position: relative;
-  height: 900px;
+  height: 700px;
   width: 100%;
   overflow: hidden;
-  padding-top: 244px;
 }
 
 /* Background Image */
@@ -40,10 +38,9 @@
   }
 }
 
-/* Content */
 .inner {
   display: flex;
-  justify-content: center; /* center children horizontally */
+  justify-content: center;
 }
 
 .content {
@@ -57,7 +54,6 @@
   margin-top: 436px;
 }
 
-/* Title */
 .title {
   font-family: var(--font-family);
   font-weight: 700;
@@ -67,16 +63,14 @@
   color: #fff;
 }
 
-/* Description */
 .description {
   font-weight: 600;
   font-size: 24px;
-  line-height: 1.33333;
+  line-height: 1.3;
   text-align: center;
   color: #fff;
 }
 
-/* Button */
 .button {
   display: flex;
   align-items: center;
@@ -84,7 +78,8 @@
   flex-direction: row;
   gap: 0px;
   border-radius: 12px;
-  padding: 12px 99px;
+  padding: 12px 10px;
+  width: 276px;
   height: 44px;
   background: #3470ff;
   font-weight: 600;

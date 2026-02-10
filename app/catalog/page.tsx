@@ -1,6 +1,7 @@
 import { getCars } from '../services/api';
 import CatalogClient from './CatalogClient';
 import css from '../Home.module.css';
+import { parseFilters } from '../services/filters';
 
 export default async function CatalogPage({
   searchParams,
@@ -16,11 +17,7 @@ export default async function CatalogPage({
   const params = await searchParams;
   const page = Number(params?.page ?? 1);
   const limit = 12;
-  const filters: Record<string, string | number | boolean> = {};
-  if (params?.brand) filters.brand = params.brand;
-  if (params?.price) filters.price = params.price;
-  if (params?.mileageFrom) filters.mileageFrom = Number(params.mileageFrom);
-  if (params?.mileageTo) filters.mileageTo = Number(params.mileageTo);
+  const filters = parseFilters(params ?? {});
 
   const response = await getCars(page, limit, filters);
   const cars = response.cars;

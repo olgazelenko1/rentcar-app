@@ -3,85 +3,147 @@
 import { useState } from 'react';
 import styles from './BookingForm.module.css';
 
-export default function BookingForm({ carId }: { carId: string }) {
+interface BookingFormProps {
+  carId: string;
+}
+
+export default function BookingForm({ carId }: BookingFormProps) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [bookingDate, setBookingDate] = useState('');
-  const [coments, setComents] = useState('');
+  const [comments, setComments] = useState('');
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    try {
-      // Якщо API має ендпоінт бронювання — зробіть POST сюди.
-      // await api.post('/bookings', { carId, name, email, ... })
-      await new Promise((r) => setTimeout(r, 800)); // симуляція
+    setMessage(null);
+    setError(null);
 
-      // Використовуємо carId, щоб уникнути помилки "defined but never used"
-      console.log('Booking data:', {
+    try {
+      const bookingData = {
         carId,
         name,
         email,
         bookingDate,
-        coments,
-      });
+        comments,
+      };
 
-      setSuccess('Booking successful!');
-    } catch (err) {
-      console.error(err);
-      setSuccess('Booking failed. Try again.');
+      console.log('Booking data:', bookingData);
+
+      await new Promise((r) => setTimeout(r, 800));
+
+      setMessage('Booking successful! We will contact you soon.');
+      setName('');
+      setEmail('');
+      setBookingDate('');
+      setComments('');
+    } catch {
+      setError('Booking failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
-      <h2 className={styles.title}>Book your car now</h2>
-      <p className={styles.subtitle}>
-        Stay connected! We are always ready to help you.
-      </p>
+    <div className={styles.formContainer}>
+      <div className={styles.header}>
+        <h2 className={styles.title}>Book This Car</h2>
+        <p className={styles.subtitle}>
+          Fill out the form and we&apos;ll get back to you shortly
+        </p>
+      </div>
 
-      <input
-        className={styles.input}
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Name"
-        required
-      />
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <div className={styles.inputGroup}>
+          <label className={styles.label} htmlFor="name">
+            Full Name *
+          </label>
+          <input
+            id="name"
+            className={styles.input}
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Enter your full name"
+            required
+          />
+        </div>
 
-      <input
-        className={styles.input}
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-        required
-      />
+        <div className={styles.inputGroup}>
+          <label className={styles.label} htmlFor="email">
+            Email Address *
+          </label>
+          <input
+            id="email"
+            className={styles.input}
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="your.email@example.com"
+            required
+          />
+        </div>
 
-      <input
-        className={styles.input}
-        type="date"
-        value={bookingDate}
-        onChange={(e) => setBookingDate(e.target.value)}
-        placeholder="Booking Date"
-        required
-      />
+        <div className={styles.inputGroup}>
+          <label className={styles.label} htmlFor="bookingDate">
+            Rental Date *
+          </label>
+          <input
+            id="bookingDate"
+            className={styles.input}
+            type="date"
+            value={bookingDate}
+            onChange={(e) => setBookingDate(e.target.value)}
+            min={new Date().toISOString().split('T')[0]}
+            required
+          />
+        </div>
 
-      <textarea
-        className={styles.textarea}
-        value={coments}
-        onChange={(e) => setComents(e.target.value)}
-        placeholder="Comments"
-      />
+        <div className={styles.inputGroup}>
+          <label className={styles.label} htmlFor="comments">
+            Additional Comments
+          </label>
+          <textarea
+            id="comments"
+            className={styles.textarea}
+            value={comments}
+            onChange={(e) => setComments(e.target.value)}
+            placeholder="Any special requests or questions?"
+            rows={4}
+          />
+        </div>
 
-      <button className={styles.button} type="submit" disabled={loading}>
-        {loading ? 'Booking...' : 'Book Now'}
-      </button>
+        <button className={styles.button} type="submit" disabled={loading}>
+          {loading ? (
+            <>
+              <span className={styles.spinner}></span>
+              Processing...
+            </>
+          ) : (
+            <>
+              <span className={styles.buttonIcon}>🚗</span>
+              Book Now
+            </>
+          )}
+        </button>
 
-      {success && <p className={styles.success}>{success}</p>}
-    </form>
+        {message && (
+          <div className={styles.successMessage}>
+            <span className={styles.successIcon}>✓</span>
+            {message}
+          </div>
+        )}
+
+        {error && (
+          <div className={styles.errorMessage}>
+            <span className={styles.errorIcon}>✗</span>
+            {error}
+          </div>
+        )}
+      </form>
+    </div>
   );
 }

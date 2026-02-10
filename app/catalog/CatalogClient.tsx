@@ -5,11 +5,9 @@ import Link from 'next/link';
 import Pagination from '../components/Pagination/Pagination';
 import type { Car } from '../types/car';
 import styles from './CatalogClient.module.css';
-import { useCarsStore } from '../store/useCarsStore';
 import FilterBar from '../components/FilterBar/FilterBar';
-import { useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { getCars } from '../services/api';
+import { useCarsData } from '../hooks/useCarsData';
+import { useFavorites } from '../hooks/useFavorites';
 
 interface Props {
   initialCars: Car[];
@@ -22,33 +20,14 @@ const CatalogClient: React.FC<Props> = ({
   currentPage,
   totalPages,
 }) => {
-  const [cars, setCars] = useState<Car[]>(initialCars ?? []);
-  const [page, setPage] = useState<number>(currentPage ?? 1);
-  const [loading, setLoading] = useState(false);
-  const searchParams = useSearchParams();
-  const limit = 12;
-
-  useEffect(() => {
-    setCars(initialCars ?? []);
-    setPage(currentPage ?? 1);
-  }, [initialCars, currentPage]);
-
-  const filters = useMemo(() => {
-    const params = Object.fromEntries(searchParams?.entries() ?? []);
-    const f: Record<string, string | number | boolean> = {};
-    if (params.brand) f.brand = params.brand;
-    if (params.price) f.price = params.price;
-    if (params.mileageFrom) f.mileageFrom = Number(params.mileageFrom);
-    if (params.mileageTo) f.mileageTo = Number(params.mileageTo);
-    return f;
-  }, [searchParams]);
-  const favorites = useCarsStore((s) => s.favorites);
-  const addFavorite = useCarsStore((s) => s.addFavorite);
-  const removeFavorite = useCarsStore((s) => s.removeFavorite);
-  const toggleFavorite = (id: string) => {
-    if (favorites.includes(id)) removeFavorite(id);
-    else addFavorite(id);
-  };
+  const { cars, page, loading, handlePageChange, handleLoadMore } = useCarsData(
+    {
+      initialCars,
+      currentPage,
+      totalPages,
+    }
+  );
+  const { toggleFavorite, isFavorite } = useFavorites();
 
   return (
     <div className={styles.container}>
@@ -60,7 +39,7 @@ const CatalogClient: React.FC<Props> = ({
         <div className={styles.grid}>
           {Array.isArray(cars) &&
             cars.map((car: Car) => {
-              const isFav = favorites.includes(car.id);
+              const isFav = isFavorite(car.id);
               return (
                 <div key={car.id} className={styles.item}>
                   <button
@@ -99,37 +78,11 @@ const CatalogClient: React.FC<Props> = ({
           alignItems: 'center',
         }}
       >
-        <Pagination
-          pageCount={totalPages}
-          onPageChange={async (selected) => {
-            const nextPage = Number(selected) + 1;
-            setLoading(true);
-            try {
-              const resp = await getCars(nextPage, limit, filters);
-              const list = Array.isArray(resp?.cars) ? resp.cars : [];
-              setCars(list);
-              setPage(nextPage);
-            } finally {
-              setLoading(false);
-            }
-          }}
-        />
+        <Pagination pageCount={totalPages} onPageChange={handlePageChange} />
         {page < totalPages && (
           <button
             className={styles.loadMoreBtn}
-            onClick={async () => {
-              if (loading) return;
-              setLoading(true);
-              try {
-                const nextPage = page + 1;
-                const resp = await getCars(nextPage, limit, filters);
-                const nextCars = Array.isArray(resp?.cars) ? resp.cars : [];
-                setCars((prev) => [...prev, ...nextCars]);
-                setPage(nextPage);
-              } finally {
-                setLoading(false);
-              }
-            }}
+            onClick={handleLoadMore}
             disabled={loading}
             aria-disabled={loading}
           >

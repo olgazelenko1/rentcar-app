@@ -1,19 +1,9 @@
 'use client';
-import React from 'react';
 import styles from './CarDetails.module.css';
 import type { Car } from '../../types/car';
 import Image from 'next/image';
 
-interface CarDetailsProps {
-  car: Car;
-  variant?: 'vertical' | 'horizontal';
-}
-
-const CarDetails: React.FC<CarDetailsProps> = ({
-  car,
-  variant = 'vertical',
-}) => {
-  const isHorizontal = variant === 'horizontal';
+export default function CarDetails({ car }: { car: Car }) {
   const parseCityCountry = (address?: string) => {
     if (!address) return { city: '', country: '' };
     const parts = address
@@ -24,61 +14,32 @@ const CarDetails: React.FC<CarDetailsProps> = ({
     const city = parts.length > 1 ? parts[parts.length - 2] : '';
     return { city, country };
   };
+
   const { city, country } = parseCityCountry(car.address);
+
   return (
-    <div className={isHorizontal ? styles.cardHorizontal : styles.cardVertical}>
+    <div className={styles.cardVertical}>
       <Image
         src={car.img}
         alt={`${car.brand} ${car.model}`}
-        className={isHorizontal ? styles.imageHorizontal : styles.imageVertical}
-        width={isHorizontal ? 640 : 400}
-        height={isHorizontal ? 400 : 250}
-        priority={isHorizontal}
+        className={styles.imageVertical}
+        width={400}
+        height={250}
       />
-      <div
-        className={isHorizontal ? styles.infoHorizontal : styles.infoVertical}
-      >
-        {isHorizontal ? (
-          <>
-            <h2 className={styles.title}>
-              {car.brand} {car.model} ({car.year})
-            </h2>
-            <p className={styles.price}>Price: ${car.rentalPrice} / day</p>
-            <p className={styles.description}>{car.description}</p>
-            <ul className={styles.detailsList}>
-              <li>Type: {car.type}</li>
-              <li>Engine: {car.engineSize}</li>
-              <li>Fuel: {car.fuelConsumption} L/100km</li>
-              <li>Mileage: {car.mileage} km</li>
-              <li>Company: {car.rentalCompany}</li>
-              {city || country ? (
-                <li>
-                  Location: {city}
-                  {city && country ? ', ' : ''}
-                  {country}
-                </li>
-              ) : null}
-            </ul>
-          </>
-        ) : (
-          <>
-            <h3 className={styles.title}>
-              {car.brand} ({car.year})
-            </h3>
-            <p className={styles.price}>${car.rentalPrice} / day</p>
-            {(city || country) && (
-              <p className={styles.meta}>
-                {city}
-                {city && country ? ', ' : ''}
-                {country}
-              </p>
-            )}
-            <p className={styles.meta}>Mileage: {car.mileage} km</p>
-          </>
+      <div className={styles.infoVertical}>
+        <h3 className={styles.title}>
+          {car.brand} ({car.year})
+        </h3>
+        <p className={styles.price}>${car.rentalPrice} / day</p>
+        {(city || country) && (
+          <p className={styles.meta}>
+            {city}
+            {city && country ? ', ' : ''}
+            {country}
+          </p>
         )}
+        <p className={styles.meta}>Mileage: {car.mileage} km</p>
       </div>
     </div>
   );
-};
-
-export default CarDetails;
+}

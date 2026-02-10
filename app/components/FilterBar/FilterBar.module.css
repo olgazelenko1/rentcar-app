@@ -1,24 +1,22 @@
-/* Filter bar layout and appearance */
 .container {
-  display: block;
+  box-sizing: border-box;
+  min-width: 924px;
   margin: 24px 0 32px;
 }
 
 .row {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  display: flex;
   gap: 16px;
 }
 
 .field {
-  grid-column: span 3;
+  flex: 0 0 calc(25% - 12px);
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
 .fieldGroup {
-  grid-column: span 6;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -51,14 +49,17 @@
 }
 
 .mileageRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   gap: 12px;
 }
 
-.searchRow {
-  display: grid;
-  grid-template-columns: 1fr auto;
+.mileageRow > input {
+  flex: 1;
+}
+
+.actionsRow {
+  display: flex;
+  align-items: flex-end;
   gap: 8px;
 }
 
@@ -79,22 +80,8 @@
   background: #1d4ed8;
 }
 
-/* Responsive tweaks */
 @media (max-width: 1024px) {
-  .field {
-    grid-column: span 4;
-  }
-  .fieldGroup {
-    grid-column: span 8;
-  }
 }
 
 @media (max-width: 768px) {
-  .row {
-    grid-template-columns: 1fr;
-  }
-  .field,
-  .fieldGroup {
-    grid-column: auto;
-  }
 }
